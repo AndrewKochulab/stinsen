@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 public enum PresentationType {
-    case modal
+    case modal(customize: (AnyView) -> AnyView = { $0 })
     case push
     @available(iOS 14, tvOS 14, watchOS 7, *)
     case fullScreen
