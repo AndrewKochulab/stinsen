@@ -20,38 +20,42 @@ final class PresentationHelper<T: NavigationCoordinatable>: ObservableObject {
             if let value = value[safe: nextId] {
                 let presentable = value.presentable
                 switch value.presentationType {
-                case .modal:
+                case .modal(let customize):
                     if presentable is AnyView {
                         let view = AnyView(NavigationCoordinatableView(id: nextId, coordinator: coordinator))
 
                         #if os(macOS)
                         self.presented = Presented(
-                            view: AnyView(
-                                NavigationView(
-                                    content: {
-                                        view
-                                    }
+                            view: customize(
+                                AnyView(
+                                    NavigationView(
+                                        content: {
+                                            view
+                                        }
+                                    )
                                 )
                             ),
-                            type: .modal
+                            type: .modal(customize: customize)
                         )
                         #else
                         self.presented = Presented(
-                            view: AnyView(
-                                NavigationView(
-                                    content: {
-                                        view.navigationBarHidden(true)
-                                    }
+                            view: customize(
+                                AnyView(
+                                    NavigationView(
+                                        content: {
+                                            view.navigationBarHidden(true)
+                                        }
+                                    )
+                                    .navigationViewStyle(StackNavigationViewStyle())
                                 )
-                                .navigationViewStyle(StackNavigationViewStyle())
                             ),
-                            type: .modal
+                            type: .modal(customize: customize)
                         )
                         #endif
                     } else {
                         self.presented = Presented(
-                            view: presentable.view(),
-                            type: .modal
+                            view: customize(presentable.view()),
+                            type: .modal(customize: customize)
                         )
                     }
                 case .push:

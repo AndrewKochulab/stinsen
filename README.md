@@ -26,7 +26,7 @@ final class UnauthenticatedCoordinator: NavigationCoordinatable {
     let stack = NavigationStack(initial: \UnauthenticatedCoordinator.start)
     
     @Root var start = makeStart
-    @Route(.modal) var forgotPassword = makeForgotPassword
+    @Route(.modal()) var forgotPassword = makeForgotPassword
     @Route(.push) var registration = makeRegistration
     
     func makeRegistration() -> RegistrationCoordinator {
